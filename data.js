@@ -11,7 +11,7 @@ window.GAYLAB_DATA = {
 
   // Optional. Leave "" to hide the button/link.
   discord: "",                          // e.g. "https://discord.gg/xxxxxxx"
-  admin: "https://dash.gaylab.me",      // gated elsewhere (Tailscale / Cloudflare Access)
+  admin: "/dash/",                      // fleet console launcher (real dashboards gated behind Tailscale)
 
   // ── Minecraft: one address, many worlds (Velocity routes players) ──────────
   minecraft: {

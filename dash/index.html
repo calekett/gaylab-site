@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>gaylab control</title>
+  <meta name="description" content="GayLab fleet control — private console, gated behind Tailscale." />
+  <meta name="theme-color" content="#0a0c10" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <a class="skip" href="#main">skip to content</a>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="/"><span class="prompt" aria-hidden="true">&gt;</span> gay<span class="grad">lab</span></a>
+    <nav class="nav" aria-label="Primary"><a href="/">&larr; site</a></nav>
+  </header>
+
+  <main id="main" class="wrap">
+    <section class="term" aria-label="Control">
+      <div class="term-bar" aria-hidden="true">
+        <span class="dot d-r"></span><span class="dot d-y"></span><span class="dot d-g"></span>
+        <span class="term-title">calekett@gaylab: ~/control</span>
+      </div>
+      <div class="term-body">
+        <p class="line"><span class="pr">$</span> ssh gaylab-control</p>
+        <h1 class="wordmark">gaylab<span class="grad">/</span>control</h1>
+        <p class="tag">Private fleet console. The live dashboards run on the tailnet &mdash; connect to Tailscale, then open the console below. Nothing here is exposed to the public internet.</p>
+        <p class="line boot warn"><span class="pr">&gt;</span> control plane bootstrapping &mdash; nodes come online soon<span class="cursor" aria-hidden="true"></span></p>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2 class="head"><span class="pr">$</span>&nbsp;systemctl status<span class="rule" aria-hidden="true"></span></h2>
+      <p class="note">Every admin surface is gated: reachable only over Tailscale (<code>tag:gaylab</code>), never the public internet.</p>
+      <div class="rows">
+        <div class="row"><span class="glyph g-planned" aria-hidden="true">○</span><div class="rc"><span class="rname">fleet health</span><span class="rdesc">one-pane node status board (fleet-ui)</span></div><div class="rright"><span class="pill g-planned">tailscale</span></div></div>
+        <div class="row"><span class="glyph g-planned" aria-hidden="true">○</span><div class="rc"><span class="rname">metrics</span><span class="rdesc">Prometheus + Grafana history &amp; alerts</span></div><div class="rright"><span class="pill g-planned">tailscale</span></div></div>
+        <div class="row"><span class="glyph g-planned" aria-hidden="true">○</span><div class="rc"><span class="rname">game panel</span><span class="rdesc">Pterodactyl — servers, users, consoles</span></div><div class="rright"><span class="pill g-planned">tailscale</span></div></div>
+        <div class="row"><span class="glyph g-planned" aria-hidden="true">○</span><div class="rc"><span class="rname">media</span><span class="rdesc">library &amp; transcode admin</span></div><div class="rright"><span class="pill g-planned">tailscale</span></div></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2 class="head"><span class="pr">#</span>&nbsp;connect<span class="rule" aria-hidden="true"></span></h2>
+      <div class="startgrid">
+        <p class="note">On the tailnet already? Open the console. Otherwise install Tailscale and join <code>tag:gaylab</code> first.</p>
+        <!-- EDIT: point this at the real dashboard once the fleet is up — your Tailscale
+             MagicDNS name for the monitoring host, e.g. http://monitoring.tailXXXX.ts.net:8088
+             (the fleet-ui). Keep it OFF the public internet. -->
+        <a class="btn" id="console-link" href="#">open fleet console &rarr;</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="statusline" aria-label="Status">
+    <span class="seg seg-accent">gaylab &middot; control</span>
+    <span class="seg">gated &middot; tailscale-only</span>
+    <span class="seg push">status: booting</span>
+  </footer>
+</body>
+</html>
