@@ -3,75 +3,69 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GayLab — game servers, consoles &amp; more</title>
-  <meta name="description" content="GayLab: a home-built fleet of game servers, retro GayStation consoles, and media — all under one roof. Grab a server address and jump in." />
-  <meta name="theme-color" content="#0b0711" />
+  <title>gaylab — self-hosted game servers, consoles &amp; media</title>
+  <meta name="description" content="gaylab.me — a home-grown cluster running game servers, retro consoles, and a media library. Grab a server address and jump in." />
+  <meta name="theme-color" content="#0a0c10" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <meta property="og:title" content="GayLab" />
-  <meta property="og:description" content="Game servers, retro consoles &amp; media — all under one roof." />
+  <meta property="og:title" content="gaylab" />
+  <meta property="og:description" content="Self-hosted game servers, retro consoles &amp; media." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://gaylab.me" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <a class="skip" href="#main">Skip to content</a>
+  <a class="skip" href="#main">skip to content</a>
+  <div class="scanlines" aria-hidden="true"></div>
 
-  <header class="site-header">
-    <a class="brand" href="/">
-      <span class="brand-mark" aria-hidden="true">&#9654;</span>
-      <span class="brand-name">Gay<span class="brand-accent">Lab</span></span>
-    </a>
+  <header class="topbar">
+    <a class="brand" href="./"><span class="prompt" aria-hidden="true">&gt;</span> gay<span class="grad">lab</span></a>
     <nav class="nav" aria-label="Primary">
-      <a href="#play">Play</a>
-      <a href="#lab">The Lab</a>
-      <a href="#connect">Connect</a>
+      <a href="#servers">servers</a>
+      <a href="#lab">the lab</a>
+      <a href="#start">start</a>
     </nav>
   </header>
 
-  <main id="main">
-    <section class="hero">
-      <p class="eyebrow" id="status-banner" hidden></p>
-      <h1 class="hero-title">Gay<span class="grad">Lab</span></h1>
-      <p class="hero-sub">A home-built fleet of <strong>game servers</strong>, retro <strong>GayStation</strong> consoles, and media &mdash; all under one roof.</p>
-      <div class="hero-cta">
-        <a class="btn btn-primary" href="#play">See the servers</a>
-        <a class="btn" href="#lab">What is this?</a>
+  <main id="main" class="wrap">
+    <section class="term" aria-label="Intro">
+      <div class="term-bar" aria-hidden="true">
+        <span class="dot d-r"></span><span class="dot d-y"></span><span class="dot d-g"></span>
+        <span class="term-title">calekett@gaylab: ~</span>
       </div>
-      <p class="hero-updated">Status as of <time id="updated">&mdash;</time></p>
+      <div class="term-body">
+        <p class="line"><span class="pr">$</span> ./gaylab --status</p>
+        <h1 class="wordmark">gay<span class="grad">lab</span></h1>
+        <p class="tag">self-hosted game servers &middot; retro consoles &middot; media &mdash; one little cluster, humming away in the closet.</p>
+        <p class="line boot" id="status-banner"><span class="pr">&gt;</span> <span id="boot-text">online</span><span class="cursor" aria-hidden="true"></span></p>
+      </div>
     </section>
 
-    <section id="play" class="section">
-      <h2 class="section-title">&#127918; Game servers</h2>
-      <p class="section-lead">Fire up your game, add the server, and you&rsquo;re in. Tap any address to copy it.</p>
-      <div id="minecraft" class="mc"></div>
-      <div id="games" class="card-grid"></div>
+    <section id="servers" class="block">
+      <h2 class="head"><span class="pr">$</span>&nbsp;ls ./servers<span class="rule" aria-hidden="true"></span></h2>
+      <p class="note">Tap an address to copy it straight into your game.</p>
+      <div id="minecraft"></div>
+      <div id="games" class="rows"></div>
     </section>
 
-    <section id="lab" class="section">
-      <h2 class="section-title">&#127752; Inside the lab</h2>
-      <p class="section-lead">What&rsquo;s humming away behind gaylab.me.</p>
-      <div id="lab-cards" class="card-grid"></div>
+    <section id="lab" class="block">
+      <h2 class="head"><span class="pr">$</span>&nbsp;tree ./gaylab<span class="rule" aria-hidden="true"></span></h2>
+      <div id="lab-tree" class="tree"></div>
     </section>
 
-    <section id="connect" class="section">
-      <h2 class="section-title">&#128225; Connect &amp; help</h2>
-      <div class="connect-grid">
-        <div class="card">
-          <h3>New here?</h3>
-          <p class="muted">Pick a server above, copy its address into your game, and jump in. Minecraft players can just use <code>gaylab.me</code>.</p>
-        </div>
-        <div class="card" id="discord-card" hidden>
-          <h3>Community</h3>
-          <p class="muted">Chat, mod lists, and event nights live in Discord.</p>
-          <a class="btn btn-primary" id="discord-link" href="#">Join the Discord</a>
-        </div>
+    <section id="start" class="block">
+      <h2 class="head"><span class="pr">#</span>&nbsp;getting started<span class="rule" aria-hidden="true"></span></h2>
+      <div class="startgrid">
+        <p class="note">New here? Grab a server above, paste the address into your game, connect. Minecraft folks can just use <code>gaylab.me</code>.</p>
+        <a class="btn" id="discord-link" href="#" hidden>join the discord &rarr;</a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <p>Made with &#127987;&#65039;&#8205;&#127752; in the GayLab.</p>
-    <p class="footer-links"><a id="admin-link" href="#">Admin</a></p>
+  <footer class="statusline" aria-label="Status">
+    <span class="seg seg-accent">gaylab.me</span>
+    <span class="seg" id="seg-count">&mdash; servers</span>
+    <span class="seg push" id="seg-updated">updated &mdash;</span>
+    <span class="seg seg-admin"><a id="admin-link" href="#">admin</a></span>
   </footer>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>

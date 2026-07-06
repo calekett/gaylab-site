@@ -1,6 +1,6 @@
 /*
  * gaylab.me — renders the page from data.js. Vanilla JS, no dependencies.
- * You normally don't need to touch this; edit data.js instead.
+ * You normally don't touch this; edit data.js instead.
  */
 (function () {
   "use strict";
@@ -12,21 +12,22 @@
     });
   }
 
-  var STATUS = {
-    online:      { label: "Online",      cls: "s-online" },
-    offline:     { label: "Offline",     cls: "s-offline" },
-    maintenance: { label: "Maintenance", cls: "s-maint" },
-    planned:     { label: "Coming soon", cls: "s-planned" }
-  };
-  function pill(status) {
-    var s = STATUS[status] || STATUS.planned;
-    return '<span class="pill ' + s.cls + '"><span class="dot"></span>' + s.label + "</span>";
-  }
+  var SLABEL = { online: "online", offline: "offline", maintenance: "maintenance", planned: "coming soon" };
+  var SCLASS = { online: "g-online", offline: "g-offline", maintenance: "g-maint", planned: "g-planned" };
+  function scls(s) { return SCLASS[s] || "g-planned"; }
+  function glyph(s) { return '<span class="glyph ' + scls(s) + '" aria-hidden="true">' + (s === "planned" ? "○" : "●") + "</span>"; }
+  function pill(s) { return '<span class="pill ' + scls(s) + '">' + (SLABEL[s] || "coming soon") + "</span>"; }
   function addrChip(text) {
     var t = esc(text);
     return '<button class="addr" type="button" data-copy="' + t + '" aria-label="Copy ' + t + '">' +
-             '<span class="addr-txt">' + t + '</span><span class="addr-ic" aria-hidden="true">&#9106;</span>' +
-           "</button>";
+      '<span class="br">[</span>' + t + '<span class="br">]</span><span class="ic" aria-hidden="true">⧉</span></button>';
+  }
+  function rc(name, desc) {
+    return '<div class="rc"><span class="rname">' + esc(name) + '</span><span class="rdesc">' + esc(desc || "") + "</span></div>";
+  }
+  function row(name, desc, status, address) {
+    return '<div class="row">' + glyph(status) + rc(name, desc) +
+      '<div class="rright">' + pill(status) + (address ? addrChip(address) : "") + "</div></div>";
   }
   function allPlanned() {
     var items = [];
@@ -35,84 +36,85 @@
     return items.length > 0 && items.every(function (x) { return (x.status || "planned") === "planned"; });
   }
 
-  // updated date
-  var upd = document.getElementById("updated");
-  if (upd) {
-    upd.textContent = D.updated || "—";
-    if (D.updated) upd.setAttribute("datetime", D.updated);
+  // boot line
+  var boot = document.getElementById("boot-text");
+  var bootLine = document.getElementById("status-banner");
+  if (boot) {
+    if (allPlanned()) {
+      boot.textContent = "still booting — servers come online soon";
+      if (bootLine) bootLine.classList.add("warn");
+    } else {
+      boot.textContent = "systems nominal — grab a server below";
+    }
   }
 
-  // honest pre-launch banner (shows only while everything is still "planned")
-  var banner = document.getElementById("status-banner");
-  if (banner && allPlanned()) {
-    banner.textContent = "🚧 Launching soon — the lab is still being built";
-    banner.hidden = false;
-  }
-
-  // minecraft feature card
+  // minecraft
   var mc = document.getElementById("minecraft");
   if (mc && D.minecraft && D.minecraft.address) {
     var m = D.minecraft;
     var worlds = (m.worlds || []).map(function (w) {
-      return "<li><span class=\"w-name\">" + esc(w.name) + "</span>" +
-             "<span class=\"w-desc\">" + esc(w.desc || "") + "</span>" +
-             pill(w.status) + "</li>";
+      return '<div class="mc-world">' + glyph(w.status) + rc(w.name, w.desc) +
+        '<div class="rright">' + pill(w.status) + "</div></div>";
     }).join("");
-    mc.innerHTML =
-      '<div class="mc-card">' +
-        '<div class="mc-head">' +
-          "<div><h3>Minecraft</h3><p class=\"muted\">Java Edition " + esc(m.version || "") + " · one address, every world</p></div>" +
-          '<div class="mc-addr">' + addrChip(m.address) + "</div>" +
-        "</div>" +
-        '<ul class="mc-worlds">' + worlds + "</ul>" +
-      "</div>";
+    mc.innerHTML = '<div class="mc">' +
+      '<div class="mc-top"><span class="mc-name">minecraft <small>java ' + esc(m.version || "") +
+        " · one address, every world</small></span>" + addrChip(m.address) + "</div>" +
+      '<div class="mc-worlds">' + worlds + "</div></div>";
   }
 
   // other games
   var games = document.getElementById("games");
   if (games && D.games) {
     games.innerHTML = D.games.map(function (g) {
-      var full = g.address + (g.port ? ":" + g.port : "");
-      return '<div class="card game">' +
-               '<div class="card-top"><h3>' + esc(g.name) + "</h3>" + pill(g.status) + "</div>" +
-               '<p class="muted">' + esc(g.desc || "") + "</p>" +
-               '<div class="card-addr">' + addrChip(full) + "</div>" +
-             "</div>";
+      return row(g.name, g.desc, g.status, g.address + (g.port ? ":" + g.port : ""));
     }).join("");
   }
 
-  // lab cards
-  var lab = document.getElementById("lab-cards");
-  if (lab && D.lab) {
-    lab.innerHTML = D.lab.map(function (c) {
-      return '<div class="card lab-card">' +
-               '<div class="lab-ic" aria-hidden="true">' + esc(c.icon || "✨") + "</div>" +
-               "<h3>" + esc(c.title) + "</h3>" +
-               '<p class="muted">' + esc(c.desc || "") + "</p>" +
-             "</div>";
-    }).join("");
+  // lab tree
+  var tree = document.getElementById("lab-tree");
+  if (tree && D.lab && D.lab.length) {
+    var maxlen = D.lab.reduce(function (a, i) { return Math.max(a, (i.key || "").length); }, 0);
+    var html = '<span class="t-row"><span class="t-name">gaylab/</span></span>';
+    D.lab.forEach(function (it, idx) {
+      var last = idx === D.lab.length - 1;
+      var branch = last ? "└─ " : "├─ ";
+      var gap = " ".repeat(Math.max(2, maxlen - (it.key || "").length + 3));
+      html += '<span class="t-row"><span class="t-branch">' + branch + "</span>" +
+        '<span class="t-name">' + esc(it.key) + "</span>" +
+        '<span class="t-desc">' + gap + esc(it.desc || "") + "</span></span>";
+    });
+    tree.innerHTML = html;
   }
+
+  // footer segments
+  var count = (D.games ? D.games.length : 0) + (D.minecraft && D.minecraft.worlds ? D.minecraft.worlds.length : 0);
+  var segCount = document.getElementById("seg-count");
+  if (segCount) segCount.textContent = count + " game servers";
+  var segUpd = document.getElementById("seg-updated");
+  if (segUpd) segUpd.textContent = "updated " + (D.updated || "—");
 
   // discord
   if (D.discord) {
-    var dc = document.getElementById("discord-card");
     var dl = document.getElementById("discord-link");
-    if (dc && dl) { dl.href = D.discord; dc.hidden = false; }
+    if (dl) { dl.href = D.discord; dl.hidden = false; }
   }
 
-  // admin link (remove it entirely if not configured)
+  // admin (drop the whole segment if not set)
   var al = document.getElementById("admin-link");
   if (al) {
-    if (D.admin) al.href = D.admin;
-    else if (al.parentNode) al.parentNode.removeChild(al);
+    if (D.admin) { al.href = D.admin; }
+    else {
+      var seg = al.closest ? al.closest(".seg") : null;
+      if (seg && seg.parentNode) seg.parentNode.removeChild(seg);
+    }
   }
 
-  // copy-to-clipboard (event delegation)
+  // copy-to-clipboard (delegated)
   document.addEventListener("click", function (e) {
     var btn = e.target.closest ? e.target.closest(".addr") : null;
     if (!btn) return;
     var text = btn.getAttribute("data-copy") || "";
-    copyText(text).then(function () { toast("Copied " + text); });
+    copyText(text).then(function () { toast("copied " + text); });
   });
   function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -134,21 +136,8 @@
   function toast(msg) {
     var t = document.getElementById("toast");
     if (!t) return;
-    t.textContent = msg;
-    t.classList.add("show");
+    t.textContent = msg; t.classList.add("show");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { t.classList.remove("show"); }, 1800);
+    toastTimer = setTimeout(function () { t.classList.remove("show"); }, 1700);
   }
-
-  /* ── Optional: live status ─────────────────────────────────────────────────
-   * Statuses above come from data.js (edited by hand). To auto-update them,
-   * publish a small JSON — e.g. {"Terraria":"online","Survival":"offline"} — and
-   * fetch it here, overriding the static values, then re-run the render. A
-   * self-hosted Uptime Kuma can produce that JSON (or embed its public status
-   * page). Left as a hook on purpose so the default site stays fully static.
-   *
-   *   fetch("status.json").then(function (r) { return r.ok ? r.json() : null; })
-   *     .then(function (live) { if (live) { /* merge + re-render *\/ } })
-   *     .catch(function () {});
-   * ────────────────────────────────────────────────────────────────────────── */
 })();
