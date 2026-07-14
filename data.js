@@ -21,9 +21,9 @@ window.GAYLAB_DATA = {
     address: "gaylab.me",               // players just type this (SRV record -> :25565)
     version: "26.2",
     worlds: [
-      { name: "survival",  desc: "vanilla+ Paper survival — the main world", status: "online" },
-      { name: "creative",  desc: "creative building, flight enabled",        status: "online" },
-      { name: "vanilla",   desc: "pure-vanilla survival, no frills",         status: "online" },
+      { name: "survival",  desc: "vanilla+ Paper survival. the main world", status: "online" },
+      { name: "creative",  desc: "creative building",        status: "online" },
+      { name: "modded",   desc: "WIP",         status: "online" },
       { name: "minigames", desc: "parkour & party games (building out)",     status: "online" }
     ]
   },
@@ -36,8 +36,8 @@ window.GAYLAB_DATA = {
 
   // ── "tree ./gaylab" — public-safe blurbs. No IPs / hostnames here. ──────────
   lab: [
-    { key: "game-servers", desc: "cluster of mini-PCs · one address · always-on" },
-    { key: "consoles",     desc: "NES → PS1 classics + modern streaming, plug-and-play" },
-    { key: "media",        desc: "private 4K library, streamed to every screen" }
+    { key: "game-servers", desc: "cluster" },
+    { key: "consoles",     desc: "gaystations. yay" },
+    { key: "media",        desc: "private media library. movies, shows, music" }
   ]
 };
