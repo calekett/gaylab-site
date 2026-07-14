@@ -160,7 +160,7 @@
         // intro boot line
         if (boot) {
           boot.textContent = up
-            ? "servers online heck yeah woo | " + pl + " player" + (pl === 1 ? "" : "s") + " online"
+            ? "servers online heck yeah baby woo | " + pl + " player" + (pl === 1 ? "" : "s") + " online"
             : "minecraft network offline — check back soon";
           if (bootLine) bootLine.classList.toggle("warn", !up);
         }
