@@ -34,6 +34,7 @@
   function allPlanned() {
     var items = [];
     if (D.minecraft && D.minecraft.worlds) items = items.concat(D.minecraft.worlds);
+    if (D.terraria && D.terraria.variants) items = items.concat(D.terraria.variants);
     if (D.games) items = items.concat(D.games);
     return items.length > 0 && items.every(function (x) { return (x.status || "planned") === "planned"; });
   }
@@ -64,6 +65,22 @@
       '<div class="mc-worlds">' + worlds + "</div></div>";
   }
 
+  // terraria (vanilla + tModLoader) — grouped like minecraft, but each variant
+  // keeps its own address:port (they're separate servers, not one proxy)
+  var terra = document.getElementById("terraria");
+  if (terra && D.terraria && D.terraria.variants) {
+    var tv = D.terraria.variants.map(function (v) {
+      return '<div class="mc-world" data-game="terraria-' + esc(v.name) + '">' + glyph(v.status) + rc(v.name, v.desc) +
+        '<div class="rright">' + pill(v.status) +
+        (v.address ? addrChip(v.address) : "") +
+        (v.port ? addrChip(String(v.port)) : "") + "</div></div>";
+    }).join("");
+    terra.innerHTML = '<div class="mc">' +
+      '<div class="mc-top"><span class="mc-name">terraria <small>' + esc(D.terraria.version || "") +
+        " &middot; vanilla &amp; modded</small></span></div>" +
+      '<div class="mc-worlds">' + tv + "</div></div>";
+  }
+
   // other games
   var games = document.getElementById("games");
   if (games && D.games) {
@@ -89,7 +106,8 @@
   }
 
   // footer segments
-  var count = (D.games ? D.games.length : 0) + (D.minecraft && D.minecraft.worlds ? D.minecraft.worlds.length : 0);
+  var count = (D.games ? D.games.length : 0) + (D.minecraft && D.minecraft.worlds ? D.minecraft.worlds.length : 0) +
+    (D.terraria && D.terraria.variants ? D.terraria.variants.length : 0);
   var segCount = document.getElementById("seg-count");
   if (segCount) segCount.textContent = count + " game servers";
   var segUpd = document.getElementById("seg-updated");
@@ -200,7 +218,7 @@
         .then(function (j) {
           var s = j && j.record;
           if (!s) return;
-          var rowEl = document.querySelector('#games [data-game="terraria"]');
+          var rowEl = document.querySelector('[data-game="terraria-vanilla"]');
           if (!rowEl) return;
           var up = !!s.online;
           var pl = (typeof s.players === "number") ? s.players : 0;
