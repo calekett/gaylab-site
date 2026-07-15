@@ -26,7 +26,7 @@
     return '<div class="rc"><span class="rname">' + esc(name) + '</span><span class="rdesc">' + esc(desc || "") + "</span></div>";
   }
   function row(name, desc, status, address, port) {
-    return '<div class="row">' + glyph(status) + rc(name, desc) +
+    return '<div class="row" data-game="' + esc(name) + '">' + glyph(status) + rc(name, desc) +
       '<div class="rright">' + pill(status) +
       (address ? addrChip(address) : "") +
       (port ? addrChip(String(port)) : "") + "</div></div>";
@@ -186,5 +186,36 @@
         }
       })
       .catch(function () { /* network/API hiccup — keep the hand-set status */ });
+  })();
+
+  // ── live status: Terraria ────────────────────────────────────────────────────
+  // Terraria can't be pinged from a browser, so a tiny relay on the control node
+  // publishes {online, players, max} to a public jsonbin blob every ~60s; the site
+  // reads that (no key — public bin). Silent fallback to the hand-set status.
+  (function probeTerraria() {
+    var URL = "https://api.jsonbin.io/v3/b/6a572050da38895dfe5f6306/latest";
+    function apply() {
+      fetch(URL, { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+          var s = j && j.record;
+          if (!s) return;
+          var rowEl = document.querySelector('#games [data-game="terraria"]');
+          if (!rowEl) return;
+          var up = !!s.online;
+          var pl = (typeof s.players === "number") ? s.players : 0;
+          var mx = s.max || "";
+          var g = rowEl.querySelector(".glyph");
+          var p = rowEl.querySelector(".rright .pill");
+          if (g) g.className = "glyph " + (up ? "g-online" : "g-offline");
+          if (p) {
+            p.className = "pill " + (up ? "g-online" : "g-offline");
+            p.textContent = up ? ("online · " + pl + (mx ? "/" + mx : "")) : "offline";
+          }
+        })
+        .catch(function () { /* keep hand-set status */ });
+    }
+    apply();
+    setInterval(apply, 60000);
   })();
 })();
