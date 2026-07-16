@@ -25,9 +25,6 @@
   var CONFIG = {
     // Where a successful login sends you. HARDCODED on purpose — never read this
     // from the URL/query string (that would be an open redirect).
-    // PREVIEW MODE: points at the in-repo hub so admin → login → hub works end
-    // to end TODAY, before dash.gaylab.me exists. Once you stand up the subdomain
-    // (see network/edge/), swap this back to "https://dash.gaylab.me/".
     redirect: "./console/",
 
     username: "admin",                 // case-insensitive match

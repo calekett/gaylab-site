@@ -20,13 +20,17 @@
   <header class="topbar">
     <a class="brand" href="https://gaylab.me/"><span class="prompt" aria-hidden="true">&gt;</span> gay<span class="grad">lab</span></a>
     <nav class="nav" aria-label="Primary">
+      <a href="#actions">actions</a>
       <a href="#surfaces">surfaces</a>
       <a href="#fleet">fleet</a>
+      <a href="#topology">network</a>
+      <a href="#journal">journal</a>
       <a href="https://gaylab.me/">&larr; site</a>
     </nav>
   </header>
 
   <main id="main" class="wrap">
+    <!-- ── Hero ── -->
     <section class="term" aria-label="Control plane">
       <div class="term-bar" aria-hidden="true">
         <span class="dot d-r"></span><span class="dot d-y"></span><span class="dot d-g"></span>
@@ -39,21 +43,53 @@
           Tailscale first. The dashboards these link to never touch the public internet.</p>
         <div class="statgrid" id="stats"></div>
         <p class="line boot" id="status-banner"><span class="pr">&gt;</span> <span id="boot-text">booting</span><span class="cursor" aria-hidden="true"></span></p>
+        <p class="line" id="uptime-line" style="margin-top:6px" hidden><span class="pr">&gt;</span> uptime: <span id="uptime-value" class="uptime-val">—</span></p>
       </div>
     </section>
 
+    <!-- ── Quick Actions ── -->
+    <section id="actions" class="block">
+      <h2 class="head"><span class="pr">$</span>&nbsp;./shortcuts<span class="rule" aria-hidden="true"></span></h2>
+      <p class="note">Quick-access commands. Each opens the relevant dashboard on the tailnet.</p>
+      <div class="action-grid" id="action-bar"></div>
+    </section>
+
+    <!-- ── Resource Gauges ── -->
+    <section id="resources" class="block">
+      <h2 class="head"><span class="pr">$</span>&nbsp;free --fleet<span class="rule" aria-hidden="true"></span></h2>
+      <p class="note">Fleet-wide capacity. Hand-set estimates &mdash; updated with each ops pass.</p>
+      <div class="gauge-grid" id="gauges"></div>
+    </section>
+
+    <!-- ── Control Surfaces ── -->
     <section id="surfaces" class="block">
       <h2 class="head"><span class="pr">$</span>&nbsp;systemctl status<span class="rule" aria-hidden="true"></span></h2>
       <p class="note">Admin surfaces. Each is gated &mdash; reachable only over Tailscale (<code>tag:gaylab</code>) or Cloudflare Access, never the public internet.</p>
       <div class="rows" id="services"></div>
     </section>
 
+    <!-- ── Fleet Nodes ── -->
     <section id="fleet" class="block">
       <h2 class="head"><span class="pr">$</span>&nbsp;fleet ls --nodes<span class="rule" aria-hidden="true"></span></h2>
       <p class="note">The hardware. Manage links drop you into each node&rsquo;s own admin UI.</p>
-      <div class="rows" id="nodes"></div>
+      <div id="nodes"></div>
     </section>
 
+    <!-- ── Network Topology ── -->
+    <section id="topology" class="block">
+      <h2 class="head"><span class="pr">$</span>&nbsp;ip vlan show<span class="rule" aria-hidden="true"></span></h2>
+      <p class="note">VLAN segmentation. All inter-VLAN traffic routes through OPNsense on pve-edge.</p>
+      <div class="topo-map" id="topo-map"></div>
+    </section>
+
+    <!-- ── Journal ── -->
+    <section id="journal" class="block">
+      <h2 class="head"><span class="pr">$</span>&nbsp;journalctl --recent<span class="rule" aria-hidden="true"></span></h2>
+      <p class="note">Recent ops events. Add entries to <code>dash.data.js</code> as you go.</p>
+      <div class="journal" id="journal-log"></div>
+    </section>
+
+    <!-- ── Connect notice ── -->
     <section class="block">
       <h2 class="head"><span class="pr">#</span>&nbsp;connect<span class="rule" aria-hidden="true"></span></h2>
       <p class="note">Not on the tailnet? Install Tailscale, join <code>tag:gaylab</code>, then set your MagicDNS
