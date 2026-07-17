@@ -41,7 +41,7 @@ window.GAYLAB_DATA = {
   games: [
     { name: "valheim",           address: "valheim.gaylab.me", port: 2456, desc: "dedicated viking survival",   status: "online" },
     { name: "ark: evolved",      address: "ark.gaylab.me",     port: 7777, desc: "dino survival · TheIsland",    status: "online" },
-    { name: "ark: ascended",     address: "ark-asa.gaylab.me", port: 7779, desc: "UE5 remaster · coming soon",   status: "planned" }
+    { name: "ark: ascended",     address: "ark-asa.gaylab.me", port: 7779, desc: "UE5 remaster · TheIsland",     status: "online" }
   ],
 
   // ── "tree ./gaylab" — public-safe blurbs. No IPs / hostnames here. ──────────
