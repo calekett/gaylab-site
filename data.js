@@ -10,7 +10,7 @@
  * value below, so players always see the real up/down state.
  */
 window.GAYLAB_DATA = {
-  updated: "2026-07-15",
+  updated: "2026-07-17",
 
   // Optional. Leave "" to hide the button/link.
   discord: "",                          // e.g. "https://discord.gg/xxxxxxx"
@@ -33,13 +33,15 @@ window.GAYLAB_DATA = {
     version: "1.4.5",
     variants: [
       { name: "vanilla",    address: "terraria.gaylab.me",   port: 7777, desc: "TShock 6.1 · open world", status: "online" },
-      { name: "tmodloader", address: "tmodloader.gaylab.me", port: 7778, desc: "modded · coming soon",    status: "planned" }
+      { name: "tmodloader", address: "tmodloader.gaylab.me", port: 7778, desc: "modded terraria",         status: "online" }
     ]
   },
 
   // ── Other game servers (each its own address:port) ─────────────────────────
   games: [
-    { name: "valheim",    address: "valheim.gaylab.me",    port: 2456, desc: "dedicated viking survival",     status: "planned" }
+    { name: "valheim",           address: "valheim.gaylab.me", port: 2456, desc: "dedicated viking survival",   status: "online" },
+    { name: "ark: evolved",      address: "ark.gaylab.me",     port: 7777, desc: "dino survival · TheIsland",    status: "online" },
+    { name: "ark: ascended",     address: "ark-asa.gaylab.me", port: 7779, desc: "UE5 remaster · coming soon",   status: "planned" }
   ],
 
   // ── "tree ./gaylab" — public-safe blurbs. No IPs / hostnames here. ──────────
